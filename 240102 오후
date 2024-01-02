@@ -135,5 +135,7 @@ floor (avg(sal)) 평균급여2
 from emp
 -- where deptno <> 30 -- where는 from 이후에 와야함 
 group by deptno
-having avg(sal) >= 2000 -- group by 를 사용했을 때는 having 을 사용하여 추춣해야함
+having avg(sal) >= 2000 -- group by 를 사용했을 때는 having 을 사용하여 추출해야함
 ;
+
+group by 가 중요함 실무에서도 많이 사용됨
