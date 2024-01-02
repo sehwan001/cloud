@@ -116,7 +116,7 @@ select *
  from orders
  group by custid;
  
- -- 도셔별 판매 총액, 판매 횟수
+ -- 도서별 판매 총액, 판매 횟수
  select bookid,
  sum(saleprice) 판매총액,
  count(saleprice) 판매횟수
