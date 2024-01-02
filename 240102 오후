@@ -1,0 +1,139 @@
+use project;
+-- 내장함수 : 단일행 함수
+
+-- 숫자 함수
+select abs(-4.5);
+select ceil(16.1);
+select floor(3.14);
+select round(3.1461592,2)
+
+-- 문자 함수
+select concat('ab', 'cd', 'ef');
+select concat(dname, '부서의 위치는', loc, '에 위치합니다.')
+from dept;   
+SELECT * FROM DEPT;
+
+select replace('1999-01-01', '-', '. ');  
+SELECT ENAME, replace(HIREDate, '-', '. ')
+FROM EMP;
+
+select substr('abcdefg', 3, 3);
+--             1234567
+select *
+from emp;
+
+-- emp hiredate  => 년, 월, 일
+select 
+	ename, 
+    hiredate,
+	substr(hiredate, 1, 4) year,
+	substr(hiredate, 6, 2) month,
+	substr(hiredate, 9, 2) day
+from emp
+where substr(hiredate, 6, 2) = '04' -- 4월 입사자를 뽑는 명령어
+order by month desc
+;
+
+-- 날짜 함수
+-- 문자열 -> 날짜
+select str_to_date('2024-01-02', '%Y-%m-%d'); -- insert 자동형변환이 되지만 사용하는 이유 -> 변수를 사용해서 동적으로 들어올때 포맷이 망가져 에러가 생기는 경우가 있음
+
+-- 날짜 -> 문자열 
+select ename, hiredate, date_format(hiredate, '%Y.%m.%d') hdate
+from emp;
+
+select sysdate(),
+		date_format(sysdate(), '%Y. %m. %d %H:%i') as nowtime
+;
+
+-- 집합 함수, 다중화 함수
+-- sum, avg, count, max, min
+
+-- 급여 총액
+select sum(sal), sum(sal)/14 , avg(sal), max(sal), min(sal), count(*) 
+from emp;
+
+-- null => comm
+select count(comm), sum(comm), avg(comm), max(comm), min(comm) -- 집계함수는 null 값은 제외하고 계산한다.
+from emp;
+
+select count(*) from emp;
+
+select count(job) from emp; -- 직급의 전체 개수가 나옴
+select count(distinct job) from emp; -- 직급의 개수 (중복 제외)
+select distinct job from emp order by job; -- 전체 직급을 보여줌 (중복 제외)
+
+-- orders 
+select distinct custid from orders order by custid;
+select count(distinct custid) from orders order by custid;
+
+select * from customer;
+
+select *
+from emp
+
+order by deptno
+;
+
+-- group by 절 
+select deptno, 
+count(*) 사원수, 
+sum(sal) 월총급여, 
+avg(sal) 평균급여, -- 부서별
+floor (avg(sal)) 평균급여2,
+max(sal) 최고금액,
+min(sal) 최저금액
+from emp
+group by deptno
+;
+
+select * from emp order by deptno;
+
+select job
+from emp
+group by job 
+;
+
+select job,
+count(*) 사원수,
+sum(sal) 월총급여,
+avg(sal) 평균급여,
+floor( avg(sal)) 평균급여2,
+max(sal) 최고금액,
+min(sal) 최저금액
+from emp
+group by job
+;
+
+select *
+ from orders;
+ 
+ -- 고객별 구매 총액, 평균 총액, 구매 횟수
+ select custid,
+ sum(saleprice) '총 구매 금액', -- 별칭은 as를 붙히거나 띄어쓰기 없거나 ''사이에 넣기
+ avg(saleprice) '평균 금액',
+ count(saleprice) '구매 횟수'
+ from orders
+ group by custid;
+ 
+ -- 도셔별 판매 총액, 판매 횟수
+ select bookid,
+ sum(saleprice) 판매총액,
+ count(saleprice) 판매횟수
+ from orders
+ group by bookid;
+ 
+ 
+ select * from emp;
+ 
+ --  월급 평균이 2000이상인 부서를 추출
+select deptno, 
+count(*) 사원수, 
+sum(sal) 월총급여, 
+-- avg(sal) 평균급여, -- 부서별
+floor (avg(sal)) 평균급여2
+from emp
+-- where deptno <> 30 -- where는 from 이후에 와야함 
+group by deptno
+having avg(sal) >= 2000 -- group by 를 사용했을 때는 having 을 사용하여 추춣해야함
+;
